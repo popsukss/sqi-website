@@ -2,11 +2,16 @@ import Link from "next/link";
 
 import { getRoadmapMeta } from "~/lib/roadmap";
 import { getSession } from "~/server/better-auth/server";
+import { api } from "~/trpc/server";
 import { RoadmapView } from "./_components/roadmap-view";
 import { StarterQuiz } from "./_components/starter-quiz";
 
 export default async function RoadmapPage() {
 	const [meta, session] = await Promise.all([getRoadmapMeta(), getSession()]);
+
+	const initialProgress = session
+		? await api.roadmap.getMyProgress()
+		: {} as Record<string, never>;
 
 	return (
 		<div className="container mx-auto px-4 py-8">
@@ -17,7 +22,7 @@ export default async function RoadmapPage() {
 				</p>
 			</div>
 
-			<RoadmapView isAuthed={!!session} meta={meta} />
+			<RoadmapView initialProgress={initialProgress} isAuthed={!!session} meta={meta} />
 
 			{!session ? (
 				<div className="mt-8 space-y-6">

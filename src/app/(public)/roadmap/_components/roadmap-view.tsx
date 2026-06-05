@@ -16,7 +16,7 @@ import {
 import "@xyflow/react/dist/style.css";
 
 import type { RoadmapMeta } from "~/lib/roadmap";
-import { api } from "~/trpc/react";
+import { api, type RouterOutputs } from "~/trpc/react";
 
 type NodeStatus = "completed" | "in_progress" | "skipped" | "unreached";
 
@@ -120,9 +120,20 @@ function buildLayout(meta: RoadmapMeta, progress: Record<string, string>) {
 	return { nodes, edges };
 }
 
-export function RoadmapView({ meta, isAuthed }: { meta: RoadmapMeta; isAuthed: boolean }) {
+export function RoadmapView({
+	meta,
+	isAuthed,
+	initialProgress,
+}: {
+	meta: RoadmapMeta;
+	isAuthed: boolean;
+	initialProgress: RouterOutputs["roadmap"]["getMyProgress"];
+}) {
 	const router = useRouter();
-	const { data: progress = {} } = api.roadmap.getMyProgress.useQuery(undefined, { enabled: isAuthed });
+	const { data: progress = {} } = api.roadmap.getMyProgress.useQuery(undefined, {
+		enabled: isAuthed,
+		initialData: initialProgress,
+	});
 
 	const { nodes: initialNodes, edges: initialEdges } = useMemo(
 		() => buildLayout(meta, progress as Record<string, string>),
