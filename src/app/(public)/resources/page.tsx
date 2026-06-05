@@ -1,11 +1,16 @@
 import Link from "next/link";
 
-import { getRoadmapMeta } from "~/lib/roadmap";
+import { getAllRoadmapResources, getRoadmapMeta } from "~/lib/roadmap";
 import { getSession } from "~/server/better-auth/server";
+import { RoadmapResources } from "./_components/roadmap-resources";
 import { ResourceList } from "./_components/resource-list";
 
 export default async function ResourcesPage() {
-	const [meta, session] = await Promise.all([getRoadmapMeta(), getSession()]);
+	const [meta, session, roadmapItems] = await Promise.all([
+		getRoadmapMeta(),
+		getSession(),
+		getAllRoadmapResources(),
+	]);
 	const checkpoints = meta.nodes.filter((n) => n.type === "checkpoint");
 
 	return (
@@ -14,7 +19,7 @@ export default async function ResourcesPage() {
 				<div>
 					<h1 className="text-3xl font-bold">Resources</h1>
 					<p className="mt-1 text-sm text-muted-foreground">
-						Community-curated videos, books, papers, and more.
+						Learning materials from the roadmap and community submissions.
 					</p>
 				</div>
 				{session ? (
@@ -34,7 +39,31 @@ export default async function ResourcesPage() {
 				)}
 			</div>
 
-			<ResourceList checkpoints={checkpoints} isAuthed={!!session} />
+			<div className="space-y-10">
+				<section>
+					<h2 className="mb-4 text-lg font-semibold">Roadmap Resources</h2>
+					<p className="mb-4 text-sm text-muted-foreground">
+						Curated materials from the{" "}
+						<a
+							className="underline underline-offset-4 hover:text-foreground"
+							href="https://github.com/popsukss/quantum-roadmap"
+							rel="noopener noreferrer"
+							target="_blank"
+						>
+							quantum-roadmap
+						</a>{" "}
+						curriculum.
+					</p>
+					<RoadmapResources checkpoints={checkpoints} items={roadmapItems} />
+				</section>
+
+				<div className="border-t border-border" />
+
+				<section>
+					<h2 className="mb-4 text-lg font-semibold">Community Submissions</h2>
+					<ResourceList checkpoints={checkpoints} isAuthed={!!session} />
+				</section>
+			</div>
 		</div>
 	);
 }

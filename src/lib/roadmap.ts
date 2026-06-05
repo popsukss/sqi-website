@@ -40,6 +40,12 @@ export type CheckpointContent = {
 	milestone: string | null;
 };
 
+export type RoadmapResourceItem = {
+	nodeId: string;
+	nodeLabel: string;
+	text: string;
+};
+
 export const getRoadmapMeta = unstable_cache(
 	async (): Promise<RoadmapMeta> => {
 		const res = await fetch(`${RAW}/meta.json`);
@@ -64,6 +70,29 @@ export const getCheckpointContent = unstable_cache(
 		return parseCheckpointMarkdown(nodeId, markdown);
 	},
 	["roadmap-checkpoint"],
+	{ revalidate: 3600 },
+);
+
+export const getAllRoadmapResources = unstable_cache(
+	async (): Promise<RoadmapResourceItem[]> => {
+		const meta = await getRoadmapMeta();
+		const contents = await Promise.all(
+			meta.nodes.map((n) => getCheckpointContent(n.id).catch(() => null)),
+		);
+
+		const result: RoadmapResourceItem[] = [];
+		meta.nodes.forEach((node, i) => {
+			const content = contents[i];
+			if (!content) return;
+			const section = content.sections.find((s) => s.heading === "Resources");
+			if (!section) return;
+			section.items.forEach((text) => {
+				result.push({ nodeId: node.id, nodeLabel: node.label, text });
+			});
+		});
+		return result;
+	},
+	["roadmap-all-resources"],
 	{ revalidate: 3600 },
 );
 
