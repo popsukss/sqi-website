@@ -120,9 +120,9 @@ function buildLayout(meta: RoadmapMeta, progress: Record<string, string>) {
 	return { nodes, edges };
 }
 
-export function RoadmapView({ meta, userId: _ }: { meta: RoadmapMeta; userId: string }) {
+export function RoadmapView({ meta, isAuthed }: { meta: RoadmapMeta; isAuthed: boolean }) {
 	const router = useRouter();
-	const { data: progress = {} } = api.roadmap.getMyProgress.useQuery();
+	const { data: progress = {} } = api.roadmap.getMyProgress.useQuery(undefined, { enabled: isAuthed });
 
 	const { nodes: initialNodes, edges: initialEdges } = useMemo(
 		() => buildLayout(meta, progress as Record<string, string>),

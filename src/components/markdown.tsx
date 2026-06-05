@@ -1,6 +1,6 @@
 "use client";
 
-import "katex/dist/katex.min.css";
+import "katex/dist/katex.min.css"; // loaded once; shared by both Markdown and MarkdownInline
 
 import ReactMarkdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
@@ -13,5 +13,17 @@ export function Markdown({ children }: { children: string }) {
 				{children}
 			</ReactMarkdown>
 		</div>
+	);
+}
+
+export function MarkdownInline({ children }: { children: string }) {
+	return (
+		<ReactMarkdown
+			components={{ p: ({ children: c }) => <span>{c}</span> }}
+			rehypePlugins={[rehypeKatex]}
+			remarkPlugins={[remarkMath]}
+		>
+			{children}
+		</ReactMarkdown>
 	);
 }

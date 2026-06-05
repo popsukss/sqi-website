@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { MarkdownInline } from "~/components/markdown";
 import { getCheckpointContent, getRoadmapMeta } from "~/lib/roadmap";
 import { getSession } from "~/server/better-auth/server";
 import { CheckpointProgress } from "./_components/checkpoint-progress";
@@ -68,7 +69,7 @@ export default async function CheckpointPage({
 								{section.items.map((item, i) => (
 									<li key={i} className="flex gap-2 text-sm">
 										<span className="mt-0.5 shrink-0 text-muted-foreground">•</span>
-										<span>{item}</span>
+										<span className="min-w-0"><MarkdownInline>{item}</MarkdownInline></span>
 									</li>
 								))}
 							</ul>

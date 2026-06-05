@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { getRoadmapMeta } from "~/lib/roadmap";
 import { getSession } from "~/server/better-auth/server";
 import { RoadmapView } from "./_components/roadmap-view";
@@ -15,11 +17,19 @@ export default async function RoadmapPage() {
 				</p>
 			</div>
 
+			<RoadmapView isAuthed={!!session} meta={meta} />
+
 			{!session ? (
-				<StarterQuiz entryPoints={meta.entryPoints} />
-			) : (
-				<RoadmapView meta={meta} userId={session.user.id} />
-			)}
+				<div className="mt-8 space-y-6">
+					<div className="rounded-lg border border-border bg-accent/30 px-4 py-3 text-sm text-muted-foreground">
+						<Link className="font-medium text-foreground underline underline-offset-4" href="/sign-in">
+							Sign in
+						</Link>{" "}
+						to track your progress — nodes colour up as you complete checkpoints.
+					</div>
+					<StarterQuiz entryPoints={meta.entryPoints} />
+				</div>
+			) : null}
 		</div>
 	);
 }
