@@ -59,7 +59,7 @@ function buildLayout(meta: RoadmapMeta, progress: Record<string, string>) {
 	const edges: Edge[] = [];
 
 	const cpSpacingX = 220;
-	const cpStartX = 300;
+	const cpStartX = 100;
 	const cpY = 60;
 
 	checkpoints.forEach((cp, i) => {
@@ -78,10 +78,14 @@ function buildLayout(meta: RoadmapMeta, progress: Record<string, string>) {
 		});
 	});
 
-	const tracksPerRow = 4;
-	const trackSpacingX = 200;
-	const trackSpacingY = 100;
-	const trackStartY = cpY + 160;
+	// cp6 is the fan-out source — center tracks beneath it
+	const lastCpX = cpStartX + (checkpoints.length - 1) * cpSpacingX;
+	const tracksPerRow = 6;
+	const trackSpacingX = 170;
+	const trackSpacingY = 120;
+	const trackStartY = cpY + 180;
+	const trackRowWidth = (tracksPerRow - 1) * trackSpacingX;
+	const trackStartX = lastCpX - trackRowWidth / 2;
 
 	tracks.forEach((track, i) => {
 		const row = Math.floor(i / tracksPerRow);
@@ -97,7 +101,7 @@ function buildLayout(meta: RoadmapMeta, progress: Record<string, string>) {
 			id: track.id,
 			type: "roadmap",
 			position: {
-				x: 100 + col * trackSpacingX,
+				x: trackStartX + col * trackSpacingX,
 				y: trackStartY + row * trackSpacingY,
 			},
 			data: { label: track.label, status, type: "track" },
