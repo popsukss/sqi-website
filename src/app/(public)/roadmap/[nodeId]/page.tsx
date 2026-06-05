@@ -5,6 +5,7 @@ import { MarkdownInline } from "~/components/markdown";
 import { getCheckpointContent, getRoadmapMeta } from "~/lib/roadmap";
 import { getSession } from "~/server/better-auth/server";
 import { CheckpointProgress } from "./_components/checkpoint-progress";
+import { ConceptChecklist } from "./_components/concept-checklist";
 
 export default async function CheckpointPage({
 	params,
@@ -65,14 +66,18 @@ export default async function CheckpointPage({
 					<section key={section.heading}>
 						<h2 className="mb-3 text-xl font-semibold">{section.heading}</h2>
 						{section.items.length > 0 ? (
-							<ul className="space-y-2">
-								{section.items.map((item, i) => (
-									<li key={i} className="flex gap-2 text-sm">
-										<span className="mt-0.5 shrink-0 text-muted-foreground">•</span>
-										<span className="min-w-0"><MarkdownInline>{item}</MarkdownInline></span>
-									</li>
-								))}
-							</ul>
+							section.heading === "Concepts" ? (
+								<ConceptChecklist items={section.items} nodeId={nodeId} />
+							) : (
+								<ul className="space-y-2">
+									{section.items.map((item, i) => (
+										<li key={i} className="flex gap-2 text-sm">
+											<span className="mt-0.5 shrink-0 text-muted-foreground">•</span>
+											<span className="min-w-0"><MarkdownInline>{item}</MarkdownInline></span>
+										</li>
+									))}
+								</ul>
+							)
 						) : (
 							<p className="text-sm text-muted-foreground">No items.</p>
 						)}
