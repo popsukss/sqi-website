@@ -67,7 +67,7 @@ export default async function CheckpointPage({
 						<h2 className="mb-3 text-xl font-semibold">{section.heading}</h2>
 						{section.items.length > 0 ? (
 							section.heading === "Concepts" ? (
-								<ConceptChecklist items={section.items} nodeId={nodeId} />
+								<ConceptChecklist isAuthed={!!session} items={section.items} nodeId={nodeId} />
 							) : (
 								<ul className="space-y-2">
 									{section.items.map((item, i) => (

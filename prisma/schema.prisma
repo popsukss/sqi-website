@@ -47,6 +47,7 @@ model User {
   votes           Vote[]
   resources       Resource[]
   roadmapProgress UserRoadmapProgress[]
+  checklistItems  UserChecklistItem[]
 
   @@unique([email])
   @@map("user")
@@ -194,4 +195,13 @@ model UserRoadmapProgress {
   user      User           @relation(fields: [userId], references: [id])
 
   @@id([userId, nodeId])
+}
+
+model UserChecklistItem {
+  userId  String
+  nodeId  String
+  itemKey String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, nodeId, itemKey])
 }

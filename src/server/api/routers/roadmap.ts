@@ -38,6 +38,31 @@ export const roadmapRouter = createTRPCRouter({
 			});
 		}),
 
+	getCheckedItems: protectedProcedure
+		.input(z.object({ nodeId: z.string() }))
+		.query(async ({ ctx, input }) => {
+			const rows = await ctx.db.userChecklistItem.findMany({
+				where: { userId: ctx.session.user.id, nodeId: input.nodeId },
+			});
+			return rows.map((r) => r.itemKey);
+		}),
+
+	setCheckedItem: protectedProcedure
+		.input(z.object({ nodeId: z.string(), itemKey: z.string(), checked: z.boolean() }))
+		.mutation(async ({ ctx, input }) => {
+			if (input.checked) {
+				await ctx.db.userChecklistItem.upsert({
+					where: { userId_nodeId_itemKey: { userId: ctx.session.user.id, nodeId: input.nodeId, itemKey: input.itemKey } },
+					update: {},
+					create: { userId: ctx.session.user.id, nodeId: input.nodeId, itemKey: input.itemKey },
+				});
+			} else {
+				await ctx.db.userChecklistItem.deleteMany({
+					where: { userId: ctx.session.user.id, nodeId: input.nodeId, itemKey: input.itemKey },
+				});
+			}
+		}),
+
 	getStarterQuizOptions: publicProcedure.query(async () => {
 		const { getRoadmapMeta } = await import("~/lib/roadmap");
 		const meta = await getRoadmapMeta();
