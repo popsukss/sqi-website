@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 export function Footer() {
 	return (
 		<footer className="border-t border-border bg-background">
@@ -11,22 +9,9 @@ export function Footer() {
 					</p>
 				</div>
 
-				<div className="flex items-center gap-4 text-muted-foreground text-sm">
-					<Link
-						className="hover:text-foreground transition-colors"
-						href="mailto:sqi@sutd.edu.sg"
-					>
-						Email
-					</Link>
-					<Link
-						className="hover:text-foreground transition-colors"
-						href="https://github.com/popsukss/sqi-website"
-						rel="noopener noreferrer"
-						target="_blank"
-					>
-						GitHub
-					</Link>
-				</div>
+				<p className="text-muted-foreground text-xs">
+					SUTD Quantum Initiatives &copy; {new Date().getFullYear()}
+				</p>
 			</div>
 		</footer>
 	);

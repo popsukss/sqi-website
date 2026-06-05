@@ -17,7 +17,7 @@ export default async function HomePage() {
 			<section className="container mx-auto flex flex-col items-center gap-6 px-4 py-24 text-center">
 				<Badge variant="outline">SUTD Student Club</Badge>
 				<h1 className="max-w-2xl text-4xl font-bold tracking-tight sm:text-5xl">
-					Building Singapore&apos;s quantum future together
+					Where students learn by building — and builders become tomorrow&apos;s quantum talent
 				</h1>
 				<p className="max-w-xl text-muted-foreground text-lg">
 					SUTD Quantum Initiatives (SQI) advances quantum computing education
@@ -41,16 +41,16 @@ export default async function HomePage() {
 				<div className="grid gap-6 sm:grid-cols-3">
 					{[
 						{
-							title: "Learn",
-							body: "A structured quantum computing roadmap from absolute beginner to researcher — at your own pace.",
+							title: "Project Track",
+							body: "Creative and intellectual space to explore quantum through your own passions — with structure, mentorship, and team support to ship real, documented projects every semester.",
 						},
 						{
-							title: "Connect",
-							body: "A community forum to ask questions, share discoveries, and get unstuck with peers who've been there.",
+							title: "Academic Learning",
+							body: "Rigorous yet accessible quantum foundations through community-driven study blocks, working toward QWorld certifications (QBronze, QNickel) as a cohort.",
 						},
 						{
-							title: "Build",
-							body: "Resources, workshops, and projects that turn theory into real quantum hardware and software experience.",
+							title: "Dialogues & Events",
+							body: "Industry talks, lab visits, cross-university workshops, and the annual Quantum Fall Fest — exposing members to the full quantum landscape beyond the classroom.",
 						},
 					].map((item) => (
 						<Card key={item.title}>
@@ -133,26 +133,44 @@ export default async function HomePage() {
 			<Separator />
 
 			{/* Contact */}
-			<section className="container mx-auto px-4 py-16 text-center">
-				<h2 className="mb-4 text-2xl font-bold">Get in Touch</h2>
-				<p className="mb-6 text-muted-foreground">
-					Interested in quantum computing or want to collaborate?
+			<section className="container mx-auto max-w-2xl px-4 py-16">
+				<h2 className="mb-4 text-center text-2xl font-bold">Get in Touch</h2>
+				<p className="mb-8 text-center text-muted-foreground">
+					Reach out to any of our EXCO members directly.
 				</p>
-				<div className="flex justify-center gap-6 text-sm">
-					<a
-						className="text-muted-foreground underline underline-offset-4 hover:text-foreground"
-						href="mailto:sqi@sutd.edu.sg"
-					>
-						sqi@sutd.edu.sg
-					</a>
-					<a
-						className="text-muted-foreground underline underline-offset-4 hover:text-foreground"
-						href="https://github.com/popsukss/sqi-website"
-						rel="noopener noreferrer"
-						target="_blank"
-					>
-						GitHub
-					</a>
+				<div className="overflow-x-auto">
+					<table className="w-full text-sm">
+						<thead>
+							<tr className="border-b border-border text-left text-muted-foreground">
+								<th className="pb-2 pr-6 font-medium">Name</th>
+								<th className="pb-2 pr-6 font-medium">Position</th>
+								<th className="pb-2 font-medium">Email</th>
+							</tr>
+						</thead>
+						<tbody className="divide-y divide-border">
+							{[
+								{ name: "Saamiya Khan", position: "President", id: "1010099" },
+								{ name: "Tanmay Jha", position: "Vice President", id: "1010330" },
+								{ name: "Ashley Simon", position: "Treasurer", id: "1010231" },
+								{ name: "Akhila Mokkapati", position: "Events Director", id: "1009107" },
+								{ name: "Popsuk Sumetchoengprachya", position: "Academic Lead", id: "1009195" },
+								{ name: "Nguyen Bao Chau", position: "Secretary", id: "1010410" },
+							].map((person) => (
+								<tr key={person.id}>
+									<td className="py-3 pr-6 font-medium">{person.name}</td>
+									<td className="py-3 pr-6 text-muted-foreground">{person.position}</td>
+									<td className="py-3">
+										<a
+											className="underline underline-offset-4 hover:text-foreground text-muted-foreground"
+											href={`mailto:${person.id}@mymail.sutd.edu.sg`}
+										>
+											{person.id}@mymail.sutd.edu.sg
+										</a>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
 				</div>
 			</section>
 		</div>
