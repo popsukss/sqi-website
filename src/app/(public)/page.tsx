@@ -158,7 +158,7 @@ export default async function HomePage() {
 				</p>
 				<div className="flex justify-center">
 					<Button asChild size="lg">
-						<a href="mailto:1010099@mymail.sutd.edu.sg?subject=Joining%20SQI">
+						<a href="mailto:saamiya_khan@mymail.sutd.edu.sg?subject=Joining%20SQI">
 							Apply to Join →
 						</a>
 					</Button>
@@ -184,22 +184,22 @@ export default async function HomePage() {
 						</thead>
 						<tbody className="divide-y divide-border">
 							{[
-								{ name: "Saamiya Khan", position: "President", id: "1010099" },
-								{ name: "Tanmay Jha", position: "Vice President", id: "1010330" },
-								{ name: "Popsuk Sumetchoengprachya", position: "Academic Lead", id: "1009195" },
-								{ name: "Ashley Simon", position: "Treasurer", id: "1010231" },
-								{ name: "Akhila Mokkapati", position: "Events Director", id: "1009107" },
-								{ name: "Nguyen Bao Chau", position: "Secretary", id: "1010410" },
+								{ name: "Saamiya Khan", position: "President", email: "saamiya_khan" },
+								{ name: "Tanmay Jha", position: "Vice President", email: "tanmay_jha" },
+								{ name: "Popsuk Sumetchoengprachya", position: "Academic Lead", email: "popsuk_sumetchoengprachya" },
+								{ name: "Ashley Simon", position: "Treasurer", email: "ashley_simon" },
+								{ name: "Akhila Mokkapati", position: "Events Director", email: "akhila_mokkapati" },
+								{ name: "Nguyen Bao Chau", position: "Secretary", email: "nguyen_bao_chau" },
 							].map((person) => (
-								<tr key={person.id}>
+								<tr key={person.email}>
 									<td className="py-3 pr-6 font-medium">{person.name}</td>
 									<td className="py-3 pr-6 text-muted-foreground">{person.position}</td>
 									<td className="py-3">
 										<a
 											className="underline underline-offset-4 hover:text-foreground text-muted-foreground"
-											href={`mailto:${person.id}@mymail.sutd.edu.sg`}
+											href={`mailto:${person.email}@mymail.sutd.edu.sg`}
 										>
-											{person.id}@mymail.sutd.edu.sg
+											{person.email}@mymail.sutd.edu.sg
 										</a>
 									</td>
 								</tr>
