@@ -38,7 +38,6 @@ export default function AdminEventsPage() {
 	const [open, setOpen] = useState(false);
 	const [editId, setEditId] = useState<string | null>(null);
 	const [form, setForm] = useState<EventForm>(EMPTY_FORM);
-	const [uploading, setUploading] = useState(false);
 
 	const createEvent = api.admin.createEvent.useMutation({
 		onSuccess: () => { void utils.event.getAll.invalidate(); setOpen(false); setForm(EMPTY_FORM); },
@@ -65,17 +64,6 @@ export default function AdminEventsPage() {
 			imageUrl: event.imageUrl ?? "",
 		});
 		setOpen(true);
-	}
-
-	async function handleImageUpload(file: File) {
-		setUploading(true);
-		const res = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}`, {
-			method: "POST",
-			body: file,
-		});
-		const data = await res.json() as { url: string };
-		setForm((f) => ({ ...f, imageUrl: data.url }));
-		setUploading(false);
 	}
 
 	function handleSubmit(e: React.FormEvent) {
@@ -175,20 +163,16 @@ export default function AdminEventsPage() {
 							/>
 						</div>
 						<div className="space-y-1">
-							<Label>Image</Label>
+							<Label htmlFor="imageUrl">Image URL</Label>
 							<Input
-								accept="image/*"
-								type="file"
-								onChange={(e) => {
-									const file = e.target.files?.[0];
-									if (file) void handleImageUpload(file);
-								}}
+								id="imageUrl"
+								placeholder="https://..."
+								type="url"
+								value={form.imageUrl}
+								onChange={(e) => setForm((f) => ({ ...f, imageUrl: e.target.value }))}
 							/>
-							{form.imageUrl && (
-								<p className="text-muted-foreground text-xs truncate">{form.imageUrl}</p>
-							)}
 						</div>
-						<Button className="w-full" disabled={isPending || uploading} type="submit">
+						<Button className="w-full" disabled={isPending} type="submit">
 							{isPending ? "Saving…" : editId ? "Update" : "Create"}
 						</Button>
 					</form>

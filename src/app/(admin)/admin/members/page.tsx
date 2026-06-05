@@ -39,7 +39,6 @@ export default function AdminMembersPage() {
 	const [open, setOpen] = useState(false);
 	const [editId, setEditId] = useState<string | null>(null);
 	const [form, setForm] = useState<MemberForm>(EMPTY_FORM);
-	const [uploading, setUploading] = useState(false);
 
 	const createMember = api.admin.createMember.useMutation({
 		onSuccess: () => { void utils.member.getAll.invalidate(); setOpen(false); setForm(EMPTY_FORM); },
@@ -67,17 +66,6 @@ export default function AdminMembersPage() {
 			order: String(member.order),
 		});
 		setOpen(true);
-	}
-
-	async function handleImageUpload(file: File) {
-		setUploading(true);
-		const res = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}`, {
-			method: "POST",
-			body: file,
-		});
-		const data = await res.json() as { url: string };
-		setForm((f) => ({ ...f, imageUrl: data.url }));
-		setUploading(false);
 	}
 
 	function handleSubmit(e: React.FormEvent) {
@@ -166,11 +154,16 @@ export default function AdminMembersPage() {
 							<Input id="order" min={0} type="number" value={form.order} onChange={(e) => setForm((f) => ({ ...f, order: e.target.value }))} />
 						</div>
 						<div className="space-y-1">
-							<Label>Photo</Label>
-							<Input accept="image/*" type="file" onChange={(e) => { const file = e.target.files?.[0]; if (file) void handleImageUpload(file); }} />
-							{form.imageUrl && <p className="text-muted-foreground text-xs truncate">{form.imageUrl}</p>}
+							<Label htmlFor="imageUrl">Photo URL</Label>
+							<Input
+								id="imageUrl"
+								placeholder="https://..."
+								type="url"
+								value={form.imageUrl}
+								onChange={(e) => setForm((f) => ({ ...f, imageUrl: e.target.value }))}
+							/>
 						</div>
-						<Button className="w-full" disabled={isPending || uploading} type="submit">
+						<Button className="w-full" disabled={isPending} type="submit">
 							{isPending ? "Saving…" : editId ? "Update" : "Create"}
 						</Button>
 					</form>
