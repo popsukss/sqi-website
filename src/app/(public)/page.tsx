@@ -151,9 +151,9 @@ export default async function HomePage() {
 							{[
 								{ name: "Saamiya Khan", position: "President", id: "1010099" },
 								{ name: "Tanmay Jha", position: "Vice President", id: "1010330" },
+								{ name: "Popsuk Sumetchoengprachya", position: "Academic Lead", id: "1009195" },
 								{ name: "Ashley Simon", position: "Treasurer", id: "1010231" },
 								{ name: "Akhila Mokkapati", position: "Events Director", id: "1009107" },
-								{ name: "Popsuk Sumetchoengprachya", position: "Academic Lead", id: "1009195" },
 								{ name: "Nguyen Bao Chau", position: "Secretary", id: "1010410" },
 							].map((person) => (
 								<tr key={person.id}>
