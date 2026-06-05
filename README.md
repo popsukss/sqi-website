@@ -1,29 +1,54 @@
-# Create T3 App
+# SUTD Quantum Initiatives (SQI) — Website
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Official website for the SUTD Quantum Initiatives club. Built with the T3 Stack.
 
-## What's next? How do I make an app with this?
+## Features
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- **Homepage** — club mission, past events, team, and EXCO contact
+- **Roadmap** — interactive React Flow tree sourced from [`quantum-roadmap`](https://github.com/popsukss/quantum-roadmap); per-node progress tracking (In Progress / Completed / Skipped) and per-concept checkboxes saved to DB for logged-in users
+- **Forum** — Markdown + KaTeX posts and comments, Reddit-style upvoting, checkpoint tags, admin moderation
+- **Resources** — community-submitted links (video/PDF/book/article) with upvoting and admin approval queue
+- **Admin panel** — manage events, members, resources, forum posts, and users
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Tech Stack
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+| Layer | Tech |
+|---|---|
+| Framework | Next.js 15 (App Router) |
+| API | tRPC v11 |
+| Database | PostgreSQL (Neon) via Prisma v6 |
+| Auth | better-auth (Google OAuth + email/password) |
+| UI | Tailwind CSS v4 + shadcn/ui |
+| Roadmap graph | @xyflow/react (React Flow) |
+| Markdown/Math | react-markdown + remark-math + rehype-katex |
 
-## Learn More
+## Local Development
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+```bash
+pnpm install
+cp .env.example .env   # fill in your values
+pnpm db:push           # push schema to your database
+pnpm dev
+```
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+## Environment Variables
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+| Variable | Required | Description |
+|---|---|---|
+| `DATABASE_URL` | Yes | Neon (or any Postgres) connection string |
+| `BETTER_AUTH_SECRET` | Yes (prod) | Random secret — `openssl rand -hex 32` |
+| `BETTER_AUTH_URL` | No | Production base URL e.g. `https://sqi.vercel.app` |
+| `BETTER_AUTH_GOOGLE_CLIENT_ID` | Yes | Google OAuth client ID |
+| `BETTER_AUTH_GOOGLE_CLIENT_SECRET` | Yes | Google OAuth client secret |
 
-## How do I deploy this?
+## Deployment (Vercel)
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+1. Create a [Neon](https://neon.tech) project and copy the connection string.
+2. Push schema: `pnpm db:push` (or create a migration with `pnpm db:generate`).
+3. Connect the GitHub repo to Vercel and set the env vars above.
+4. Add the Google OAuth redirect URI: `https://<your-domain>/api/auth/callback/google`
+5. Vercel runs `prisma migrate deploy && next build` on each deploy automatically.
+
+## Roadmap Content
+
+Checkpoint and track content is fetched from [`popsukss/quantum-roadmap`](https://github.com/popsukss/quantum-roadmap) at build/request time (1-hour cache). To update content, push to that repo — no redeployment needed.
