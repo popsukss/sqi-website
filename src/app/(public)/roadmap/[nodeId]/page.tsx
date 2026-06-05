@@ -25,6 +25,11 @@ export default async function CheckpointPage({
 	const node = meta.nodes.find((n) => n.id === nodeId);
 	const typeLabel = node?.type === "track" ? "Track" : "Checkpoint";
 
+	const checkpoints = meta.nodes.filter((n) => n.type === "checkpoint");
+	const currentIndex = checkpoints.findIndex((n) => n.id === nodeId);
+	const prev = currentIndex > 0 ? checkpoints[currentIndex - 1] : null;
+	const next = currentIndex !== -1 && currentIndex < checkpoints.length - 1 ? checkpoints[currentIndex + 1] : null;
+
 	return (
 		<div className="container mx-auto max-w-3xl px-4 py-8">
 			<div className="mb-6">
@@ -49,7 +54,7 @@ export default async function CheckpointPage({
 						<Link className="underline underline-offset-4" href="/sign-in">
 							Sign in
 						</Link>{" "}
-						to track your progress.
+						to mark this checkpoint complete, save checklist items, and colour the roadmap as you progress.
 					</p>
 				)}
 			</div>
@@ -84,6 +89,29 @@ export default async function CheckpointPage({
 					</section>
 				))}
 			</div>
+
+			{node?.type === "checkpoint" && (prev ?? next) && (
+				<div className="mt-10 flex items-center justify-between border-t border-border pt-6">
+					{prev ? (
+						<Link
+							className="text-sm text-muted-foreground hover:text-foreground"
+							href={`/roadmap/${prev.id}`}
+						>
+							← {prev.label}
+						</Link>
+					) : (
+						<span />
+					)}
+					{next && (
+						<Link
+							className="text-sm text-muted-foreground hover:text-foreground"
+							href={`/roadmap/${next.id}`}
+						>
+							{next.label} →
+						</Link>
+					)}
+				</div>
+			)}
 		</div>
 	);
 }

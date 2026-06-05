@@ -4,14 +4,13 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { Button } from "~/components/ui/button";
-import { Card, CardContent } from "~/components/ui/card";
 import type { EntryPoint } from "~/lib/roadmap";
 
-export function StarterQuiz({ entryPoints }: { entryPoints: EntryPoint[] }) {
+export function StarterQuiz({ entryPoints, isAuthed }: { entryPoints: EntryPoint[]; isAuthed: boolean }) {
 	const [selected, setSelected] = useState<string | null>(null);
 
 	return (
-		<div className="mx-auto max-w-xl space-y-6">
+		<div className="mx-auto max-w-xl space-y-4">
 			<div className="space-y-1">
 				<h2 className="text-xl font-semibold">Where do you start?</h2>
 				<p className="text-muted-foreground text-sm">
@@ -36,24 +35,18 @@ export function StarterQuiz({ entryPoints }: { entryPoints: EntryPoint[] }) {
 				))}
 			</div>
 
-			<div className="flex flex-col gap-3">
-				{selected && (
-					<Button asChild>
-						<Link href={`/roadmap/${selected}`}>View my checkpoint →</Link>
-					</Button>
-				)}
-				<Card>
-					<CardContent className="pt-4">
-						<p className="text-muted-foreground text-sm">
-							<strong>Sign in</strong> to save your progress and track your journey
-							across the roadmap.{" "}
-							<Link className="underline underline-offset-4" href="/sign-in">
-								Sign in
-							</Link>
-						</p>
-					</CardContent>
-				</Card>
-			</div>
+			{selected && (
+				<Button asChild>
+					<Link href={`/roadmap/${selected}`}>View my checkpoint →</Link>
+				</Button>
+			)}
+
+			{!isAuthed && (
+				<p className="text-muted-foreground text-sm">
+					<Link className="underline underline-offset-4" href="/sign-in">Sign in</Link>
+					{" "}to save your progress and track your journey across the roadmap.
+				</p>
+			)}
 		</div>
 	);
 }

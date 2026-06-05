@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { MarkdownInline } from "~/components/markdown";
@@ -29,7 +30,16 @@ function GuestChecklist({ nodeId, items }: { nodeId: string; items: string[] }) 
 		});
 	}
 
-	return <ChecklistUI checked={checked} items={items} onToggle={toggle} />;
+	return (
+		<div>
+			<ChecklistUI checked={checked} items={items} onToggle={toggle} />
+			<p className="mt-2 text-xs text-muted-foreground">
+				Saved in this browser only.{" "}
+				<Link className="underline underline-offset-4" href="/sign-in">Sign in</Link>
+				{" "}to sync across devices.
+			</p>
+		</div>
+	);
 }
 
 function AuthedChecklist({ nodeId, items }: { nodeId: string; items: string[] }) {

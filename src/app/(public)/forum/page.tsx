@@ -64,7 +64,24 @@ export default async function ForumPage({
 			</div>
 
 			{posts.length === 0 ? (
-				<p className="py-12 text-center text-muted-foreground">No posts yet. Be the first!</p>
+				<div className="flex flex-col items-center gap-4 py-12 text-center">
+					<p className="text-muted-foreground">No posts yet — be the first to start a discussion.</p>
+					{session ? (
+						<Link
+							className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+							href="/forum/new"
+						>
+							Create the first post →
+						</Link>
+					) : (
+						<Link
+							className="rounded-md border border-border px-4 py-2 text-sm hover:bg-accent"
+							href="/sign-in"
+						>
+							Sign in to post →
+						</Link>
+					)}
+				</div>
 			) : (
 				<div className="divide-y divide-border">
 					{posts.map((post) => (

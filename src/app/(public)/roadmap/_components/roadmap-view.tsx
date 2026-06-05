@@ -78,7 +78,6 @@ function buildLayout(meta: RoadmapMeta, progress: Record<string, string>) {
 		});
 	});
 
-	// cp6 is the fan-out source — center tracks beneath it
 	const lastCpX = cpStartX + (checkpoints.length - 1) * cpSpacingX;
 	const tracksPerRow = 6;
 	const trackSpacingX = 170;
@@ -120,6 +119,13 @@ function buildLayout(meta: RoadmapMeta, progress: Record<string, string>) {
 	return { nodes, edges };
 }
 
+const LEGEND = [
+	{ label: "Not started", color: "#e4e4e7" },
+	{ label: "In Progress", color: "#f59e0b" },
+	{ label: "Completed", color: "#18181b" },
+	{ label: "Skipped", color: "#71717a" },
+];
+
 export function RoadmapView({
 	meta,
 	isAuthed,
@@ -151,8 +157,8 @@ export function RoadmapView({
 	);
 
 	return (
-		<div className="space-y-4">
-			<div className="h-[480px] w-full rounded-lg border border-border overflow-hidden">
+		<div className="space-y-3">
+			<div className="h-[60vh] min-h-[460px] w-full rounded-lg border border-border overflow-hidden">
 				<ReactFlow
 					edges={edges}
 					fitView
@@ -166,6 +172,19 @@ export function RoadmapView({
 					<Controls />
 				</ReactFlow>
 			</div>
+
+			<div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 px-1">
+				{LEGEND.map(({ label, color }) => (
+					<span key={label} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+						<span
+							className="h-3 w-3 rounded-full border border-border"
+							style={{ background: color }}
+						/>
+						{label}
+					</span>
+				))}
+			</div>
+
 			<p className="text-center text-muted-foreground text-xs">
 				Click any node to view the checkpoint details and track your progress.
 			</p>

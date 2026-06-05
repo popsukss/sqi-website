@@ -16,6 +16,12 @@ const STATUS_COLORS: Record<Status, string> = {
 	SKIPPED: "bg-zinc-100 text-zinc-600 border-zinc-300",
 };
 
+const STATUS_TOOLTIPS: Record<Status, string> = {
+	IN_PROGRESS: "Mark as actively working through this checkpoint",
+	COMPLETED: "Mark as done — node turns dark on the roadmap",
+	SKIPPED: "Skip for now — you can come back later",
+};
+
 export function CheckpointProgress({ nodeId }: { nodeId: string }) {
 	const { data: progress = {}, refetch } = api.roadmap.getMyProgress.useQuery();
 	const setProgress = api.roadmap.setProgress.useMutation({ onSuccess: () => refetch() });
@@ -38,6 +44,7 @@ export function CheckpointProgress({ nodeId }: { nodeId: string }) {
 							: "border-border bg-background hover:bg-accent"
 					}`}
 					disabled={setProgress.isPending}
+					title={STATUS_TOOLTIPS[s]}
 					type="button"
 					onClick={() => setProgress.mutate({ nodeId, status: s })}
 				>

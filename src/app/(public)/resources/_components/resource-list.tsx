@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 import { api } from "~/trpc/react";
@@ -71,7 +72,24 @@ export function ResourceList({
 			</div>
 
 			{resources.length === 0 ? (
-				<p className="py-12 text-center text-muted-foreground">No resources found.</p>
+				<div className="flex flex-col items-center gap-3 py-12 text-center">
+					<p className="text-muted-foreground">No community resources yet.</p>
+					{isAuthed ? (
+						<Link
+							className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+							href="/resources/new"
+						>
+							Submit the first one →
+						</Link>
+					) : (
+						<Link
+							className="rounded-md border border-border px-4 py-2 text-sm hover:bg-accent"
+							href="/sign-in"
+						>
+							Sign in to submit →
+						</Link>
+					)}
+				</div>
 			) : (
 				<div className="space-y-3">
 					{resources.map((r) => (
@@ -80,6 +98,7 @@ export function ResourceList({
 								<button
 									className="text-sm text-muted-foreground transition-colors hover:text-foreground disabled:opacity-50"
 									disabled={!isAuthed || vote.isPending}
+									title={isAuthed ? undefined : "Sign in to vote"}
 									type="button"
 									onClick={() => vote.mutate({ resourceId: r.id, value: 1 })}
 								>
@@ -89,6 +108,7 @@ export function ResourceList({
 								<button
 									className="text-sm text-muted-foreground transition-colors hover:text-foreground disabled:opacity-50"
 									disabled={!isAuthed || vote.isPending}
+									title={isAuthed ? undefined : "Sign in to vote"}
 									type="button"
 									onClick={() => vote.mutate({ resourceId: r.id, value: -1 })}
 								>
@@ -116,7 +136,12 @@ export function ResourceList({
 								</a>
 								<p className="mt-1 text-sm text-muted-foreground">{r.description}</p>
 								<p className="mt-1 text-xs text-muted-foreground">
-									Submitted by {r.submittedBy.name}
+									Submitted by {r.submittedBy.name} ·{" "}
+									{new Date(r.createdAt).toLocaleDateString("en-SG", {
+										year: "numeric",
+										month: "short",
+										day: "numeric",
+									})}
 								</p>
 							</div>
 						</div>

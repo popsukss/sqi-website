@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 import { authClient } from "~/server/better-auth/client";
@@ -18,6 +19,7 @@ export function Navbar() {
 	const pathname = usePathname();
 	const router = useRouter();
 	const { data: session } = authClient.useSession();
+	const [open, setOpen] = useState(false);
 
 	async function handleSignOut() {
 		await authClient.signOut();
@@ -64,8 +66,36 @@ export function Navbar() {
 							<Link href="/sign-in">Sign in</Link>
 						</Button>
 					)}
+					<button
+						aria-label="Toggle menu"
+						className="ml-1 flex h-8 w-8 items-center justify-center rounded-md border border-border md:hidden"
+						type="button"
+						onClick={() => setOpen((o) => !o)}
+					>
+						{open ? "✕" : "☰"}
+					</button>
 				</div>
 			</div>
+
+			{open && (
+				<div className="border-t border-border md:hidden">
+					<nav className="container mx-auto flex flex-col px-4 py-2">
+						{NAV_LINKS.map((link) => (
+							<Link
+								key={link.href}
+								className={cn(
+									"py-2 text-sm transition-colors hover:text-foreground",
+									pathname === link.href ? "font-medium text-foreground" : "text-muted-foreground",
+								)}
+								href={link.href}
+								onClick={() => setOpen(false)}
+							>
+								{link.label}
+							</Link>
+						))}
+					</nav>
+				</div>
+			)}
 		</header>
 	);
 }
