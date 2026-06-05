@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
+import { authClient } from "~/server/better-auth/client";
 import { cn } from "~/lib/utils";
+import { Button } from "~/components/ui/button";
 
 const NAV_LINKS = [
 	{ href: "/", label: "Home" },
@@ -14,6 +16,14 @@ const NAV_LINKS = [
 
 export function Navbar() {
 	const pathname = usePathname();
+	const router = useRouter();
+	const { data: session } = authClient.useSession();
+
+	async function handleSignOut() {
+		await authClient.signOut();
+		router.push("/");
+		router.refresh();
+	}
 
 	return (
 		<header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -40,12 +50,20 @@ export function Navbar() {
 				</nav>
 
 				<div className="flex items-center gap-2">
-					<Link
-						className="rounded-md border border-border px-3 py-1.5 text-sm transition-colors hover:bg-accent"
-						href="/sign-in"
-					>
-						Sign in
-					</Link>
+					{session ? (
+						<>
+							<span className="hidden text-muted-foreground text-sm md:inline">
+								{session.user.name}
+							</span>
+							<Button size="sm" variant="outline" onClick={handleSignOut}>
+								Sign out
+							</Button>
+						</>
+					) : (
+						<Button asChild size="sm" variant="outline">
+							<Link href="/sign-in">Sign in</Link>
+						</Button>
+					)}
 				</div>
 			</div>
 		</header>

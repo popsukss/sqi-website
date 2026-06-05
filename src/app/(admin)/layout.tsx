@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { db } from "~/server/db";
 import { getSession } from "~/server/better-auth/server";
 
 export default async function AdminLayout({
@@ -10,6 +12,13 @@ export default async function AdminLayout({
 	const session = await getSession();
 
 	if (!session) redirect("/sign-in");
+
+	const user = await db.user.findUnique({
+		where: { id: session.user.id },
+		select: { role: true },
+	});
+
+	if (user?.role !== "ADMIN") redirect("/");
 
 	return (
 		<div className="flex min-h-screen">
@@ -26,13 +35,13 @@ export default async function AdminLayout({
 						{ href: "/admin/forum", label: "Forum" },
 						{ href: "/admin/users", label: "Users" },
 					].map((item) => (
-						<a
+						<Link
 							key={item.href}
 							className="rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
 							href={item.href}
 						>
 							{item.label}
-						</a>
+						</Link>
 					))}
 				</nav>
 			</aside>
